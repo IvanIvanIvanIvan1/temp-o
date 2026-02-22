@@ -4,15 +4,11 @@
     "stations": [
       {
         "image": "images/2.1.jpg",
-        "options": [
-          {"label": "B", "correct": true}
-        ]
+        "options": [{"label": "B", "correct": true}]
       },
       {
         "image": "images/2.2.jpg",
-        "options": [
-          {"label": "A", "correct": true}
-        ]
+        "options": [{"label": "A", "correct": true}]
       }
     ]
   }
