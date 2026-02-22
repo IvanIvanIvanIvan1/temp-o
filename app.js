@@ -5,53 +5,49 @@ let time = 0;
 let timerInterval;
 let playerName = "";
 let ageGroup = "";
-const ADMIN_PASSWORD = "Результати";
 const allGroups = ["Ч10","Ч12","Ч14","Ч16","Ч18","Ч-О","Ж10","Ж12","Ж14","Ж16","Ж18","Ж-О"];
+const ADMIN_PASSWORD = "Результати"; // постав свій пароль
 
-// Завантаження тренувань
+// -------------------- Завантаження завдань --------------------
 async function loadTasks() {
     try {
         const res = await fetch('data/tasks.json');
         tasks = await res.json();
         const select = document.getElementById('trainingSelect');
         select.innerHTML = '<option value="" disabled selected>Оберіть тренування</option>';
-        tasks.forEach((t,i) => {
-            const opt = document.createElement('option');
-            opt.value = i;
-            opt.text = t.name;
-            select.appendChild(opt);
+        tasks.forEach((t, i) => {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = t.name;
+            select.appendChild(option);
         });
-    } catch(err) {
-        console.error(err);
+    } catch (err) {
+        console.error("Помилка завантаження тренувань: " + err);
         alert("Не вдалося завантажити тренування!");
     }
 }
 loadTasks();
 
-// Початок тренування
+// -------------------- Початок тренування --------------------
 function startTraining() {
     playerName = document.getElementById('playerName').value.trim();
+    if(playerName === "") { alert("Введіть своє ім'я!"); return; }
+
     ageGroup = document.getElementById('ageGroupSelect').value;
-    const trainingIndex = parseInt(document.getElementById('trainingSelect').value);
+    if(ageGroup === "") { alert("Оберіть вікову групу!"); return; }
 
-    if(!playerName || !ageGroup || isNaN(trainingIndex)) {
-        alert("Будь ласка, введіть ім'я, виберіть групу та тренування!");
-        return;
-    }
-
-    score = 0;
-    time = 0;
-    currentTaskIndex = 0;
+    score = 0; time = 0; currentTaskIndex = 0;
 
     document.getElementById('menu').classList.add('hidden');
     document.getElementById('game').classList.remove('hidden');
 
-    timerInterval = setInterval(()=> time++,1000);
+    timerInterval = setInterval(()=>time++, 1000);
 
+    const trainingIndex = parseInt(document.getElementById('trainingSelect').value);
     showTask(trainingIndex);
 }
 
-// Показати станцію
+// -------------------- Показ завдання --------------------
 function showTask(trainingIndex) {
     if(currentTaskIndex >= tasks[trainingIndex].stations.length) {
         endTraining();
@@ -61,31 +57,37 @@ function showTask(trainingIndex) {
     document.getElementById('questionTitle').innerText = `Станція ${currentTaskIndex+1}`;
     document.getElementById('questionImage').src = task.image;
 
-    const btnDiv = document.getElementById('answerButtons');
-    btnDiv.innerHTML = '';
-    ['A','B','C','D','E','F','Z'].forEach(label=>{
+    const buttonsDiv = document.getElementById('answerButtons');
+    buttonsDiv.innerHTML = '';
+
+    const allLabels = ['A','B','C','D','E','F','Z'];
+    allLabels.forEach(label=>{
         const btn = document.createElement('button');
         btn.innerText = label;
-        const option = task.options.find(o=>o.label===label);
-        btn.onclick = ()=>checkAnswer(option?option.correct:false,trainingIndex);
-        btnDiv.appendChild(btn);
+
+        const option = task.options.find(o => o.label === label);
+        btn.onclick = ()=>{
+            if(option && !option.correct) time += 30; // штраф за неправильну
+            checkAnswer(option ? option.correct : false, trainingIndex);
+        };
+        buttonsDiv.appendChild(btn);
     });
 }
 
-// Перевірка відповіді
-function checkAnswer(isCorrect,trainingIndex){
-    if(!isCorrect) time += 30; // штраф за неправильну
-    else score += 10;
+// -------------------- Перевірка відповіді --------------------
+function checkAnswer(isCorrect, trainingIndex) {
+    if(isCorrect) score += 10;
     currentTaskIndex++;
     showTask(trainingIndex);
 }
 
-// Завершення тренування
+// -------------------- Завершення тренування --------------------
 async function endTraining() {
     clearInterval(timerInterval);
+    document.getElementById('game').classList.add('hidden');
 
-    // Зберігаємо результат у Firestore
     try {
+        // Зберігаємо результат у Firebase
         await db.collection('results').add({
             name: playerName,
             group: ageGroup,
@@ -93,44 +95,44 @@ async function endTraining() {
             time: time,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
-    } catch (err) {
+    } catch(err){
         console.error("Помилка запису у Firebase:", err);
         alert("Не вдалося зберегти результат!");
     }
 
-    // Показуємо привітання
+    // Показ привітання
     document.getElementById('congratsMessage').innerText =
         `Вітаємо, ${playerName}! Ви завершили тренування.`;
-    document.getElementById('game').classList.add('hidden');
     document.getElementById('congrats').classList.remove('hidden');
 }
 
+// -------------------- Закрити привітання --------------------
 function closeCongrats(){
     document.getElementById('congrats').classList.add('hidden');
     document.getElementById('menu').classList.remove('hidden');
 }
 
-// Адмінка
+// -------------------- Адмінка --------------------
 async function showAdminPanel() {
     const password = prompt("Пароль:");
-    if(password !== ADMIN_PASSWORD){ alert("Неправильний пароль"); return; }
+    if(password !== ADMIN_PASSWORD){ alert("Неправильний пароль!"); return; }
 
     const div = document.getElementById('recordsList');
     div.innerHTML = '';
 
     try {
         const snapshot = await db.collection('results').get();
-        const allResults = snapshot.docs.map(doc => doc.data());
+        const allResults = snapshot.docs.map(doc=>doc.data());
 
-        allGroups.forEach(group => {
-            const groupResults = allResults.filter(r => r.group === group)
-                                            .sort((a,b) => a.time - b.time);
+        allGroups.forEach(group=>{
+            const groupResults = allResults.filter(r=>r.group===group)
+                                           .sort((a,b)=>a.time-b.time);
 
             const h3 = document.createElement('h3');
             h3.innerText = group;
             div.appendChild(h3);
 
-            if(groupResults.length === 0){
+            if(groupResults.length===0){
                 div.appendChild(document.createElement('p')).innerText = "Ще немає результатів";
                 return;
             }
@@ -143,9 +145,9 @@ async function showAdminPanel() {
             table.appendChild(header);
 
             groupResults.forEach((r,i)=>{
-                const tr = document.createElement('tr');
+                const tr=document.createElement('tr');
                 [i+1, r.name, r.score, r.time].forEach(val=>{
-                    const td = document.createElement('td'); td.innerText=val; td.style.border="1px solid #333"; td.style.padding="5px"; tr.appendChild(td);
+                    const td=document.createElement('td'); td.innerText=val; td.style.border="1px solid #333"; td.style.padding="5px"; tr.appendChild(td);
                 });
                 table.appendChild(tr);
             });
@@ -158,4 +160,8 @@ async function showAdminPanel() {
     }
 
     document.getElementById('adminPanel').classList.remove('hidden');
+}
+
+function hideAdminPanel() {
+    document.getElementById('adminPanel').classList.add('hidden');
 }
