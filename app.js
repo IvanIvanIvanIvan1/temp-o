@@ -3,6 +3,7 @@ let currentTaskIndex = 0;
 let score = 0;
 let time = 0;
 let timerInterval;
+let playerName = "";
 
 async function loadTasks() {
     const res = await fetch('data/tasks.json');
@@ -19,6 +20,13 @@ async function loadTasks() {
 loadTasks();
 
 function startTraining() {
+    // зчитуємо ім'я
+    playerName = document.getElementById('playerName').value.trim();
+    if(playerName === "") {
+        alert("Будь ласка, введіть своє ім'я!");
+        return;
+    }
+
     score = 0;
     time = 0;
     currentTaskIndex = 0;
@@ -72,7 +80,8 @@ function endTraining() {
     clearInterval(timerInterval);
     document.getElementById('game').classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
-    document.getElementById('finalScore').innerText = `Ваш результат: ${score} балів за ${time} секунд.`;
+    document.getElementById('finalScore').innerText = 
+        `${playerName}, ваш результат: ${score} балів за ${time} секунд.`;
 }
 
 function restart() {
