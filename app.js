@@ -3,7 +3,7 @@ let currentTaskIndex = 0;
 let score = 0;
 let time = 0;
 let timerInterval;
-let playerName = "";
+let playerName = ""; // додано для імені учня
 
 async function loadTasks() {
     const res = await fetch('data/tasks.json');
@@ -20,7 +20,7 @@ async function loadTasks() {
 loadTasks();
 
 function startTraining() {
-    // зчитуємо ім'я
+    // зчитування імені
     playerName = document.getElementById('playerName').value.trim();
     if(playerName === "") {
         alert("Будь ласка, введіть своє ім'я!");
@@ -55,18 +55,18 @@ function showTask(trainingIndex) {
 
     const buttonsDiv = document.getElementById('answerButtons');
     buttonsDiv.innerHTML = '';
-const allLabels = ['A','B','C','D','E','F','Z'];
 
-allLabels.forEach(label => {
-    const btn = document.createElement('button');
-    btn.innerText = label;
+    const allLabels = ['A','B','C','D','E','F','Z'];
+    allLabels.forEach(label => {
+        const btn = document.createElement('button');
+        btn.innerText = label;
 
-    // шукаємо у task.options, чи ця кнопка правильна
-    const option = task.options.find(o => o.label === label);
-    btn.onclick = () => checkAnswer(option ? option.correct : false, trainingIndex);
+        // перевірка, чи ця кнопка правильна
+        const option = task.options.find(o => o.label === label);
+        btn.onclick = () => checkAnswer(option ? option.correct : false, trainingIndex);
 
-    buttonsDiv.appendChild(btn);
-});
+        buttonsDiv.appendChild(btn);
+    });
 }
 
 function checkAnswer(isCorrect, trainingIndex) {
@@ -80,8 +80,7 @@ function endTraining() {
     clearInterval(timerInterval);
     document.getElementById('game').classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
-    document.getElementById('finalScore').innerText = 
-        `${playerName}, ваш результат: ${score} балів за ${time} секунд.`;
+    document.getElementById('finalScore').innerText = `${playerName}, ваш результат: ${score} балів за ${time} секунд.`;
 }
 
 function restart() {
