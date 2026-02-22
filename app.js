@@ -81,17 +81,26 @@ function checkAnswer(isCorrect,trainingIndex){
 }
 
 // Завершення тренування
-function endTraining(){
+async function endTraining() {
     clearInterval(timerInterval);
 
-    // Зберігання результату
-    const key = `records_${ageGroup}`;
-    const prev = JSON.parse(localStorage.getItem(key)) || [];
-    prev.push({name: playerName, score, time});
-    localStorage.setItem(key, JSON.stringify(prev));
+    // Зберігаємо результат у Firestore
+    try {
+        await db.collection('results').add({
+            name: playerName,
+            group: ageGroup,
+            score: score,
+            time: time,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    } catch (err) {
+        console.error("Помилка запису у Firebase:", err);
+        alert("Не вдалося зберегти результат!");
+    }
 
-    // Привітання
-    document.getElementById('congratsMessage').innerText = `Вітаємо, ${playerName}! Ви завершили тренування.`;
+    // Показуємо привітання
+    document.getElementById('congratsMessage').innerText =
+        `Вітаємо, ${playerName}! Ви завершили тренування.`;
     document.getElementById('game').classList.add('hidden');
     document.getElementById('congrats').classList.remove('hidden');
 }
@@ -102,34 +111,51 @@ function closeCongrats(){
 }
 
 // Адмінка
-function showAdminPanel(){
+async function showAdminPanel() {
     const password = prompt("Пароль:");
-    if(password!==ADMIN_PASSWORD){ alert("Неправильний пароль"); return;}
+    if(password !== ADMIN_PASSWORD){ alert("Неправильний пароль"); return; }
+
     const div = document.getElementById('recordsList');
     div.innerHTML = '';
-    allGroups.forEach(group=>{
-        const recs = JSON.parse(localStorage.getItem(`records_${group}`)) || [];
-        const h3 = document.createElement('h3'); h3.innerText = group; div.appendChild(h3);
-        if(recs.length===0){ div.appendChild(document.createElement('p')).innerText="Ще немає результатів"; return;}
-        recs.sort((a,b)=>a.time-b.time);
-        const table = document.createElement('table');
-        const header = document.createElement('tr');
-        ['Місце','Ім’я','Бали','Час (сек)'].forEach(txt=>{
-            const th=document.createElement('th'); th.innerText=txt; th.style.border="1px solid #333"; th.style.padding="5px"; header.appendChild(th);
-        });
-        table.appendChild(header);
-        recs.forEach((r,i)=>{
-            const tr=document.createElement('tr');
-            [i+1,r.name,r.score,r.time].forEach(val=>{
-                const td=document.createElement('td'); td.innerText=val; td.style.border="1px solid #333"; td.style.padding="5px"; tr.appendChild(td);
-            });
-            table.appendChild(tr);
-        });
-        div.appendChild(table);
-    });
-    document.getElementById('adminPanel').classList.remove('hidden');
-}
 
-function hideAdminPanel(){
-    document.getElementById('adminPanel').classList.add('hidden');
+    try {
+        const snapshot = await db.collection('results').get();
+        const allResults = snapshot.docs.map(doc => doc.data());
+
+        allGroups.forEach(group => {
+            const groupResults = allResults.filter(r => r.group === group)
+                                            .sort((a,b) => a.time - b.time);
+
+            const h3 = document.createElement('h3');
+            h3.innerText = group;
+            div.appendChild(h3);
+
+            if(groupResults.length === 0){
+                div.appendChild(document.createElement('p')).innerText = "Ще немає результатів";
+                return;
+            }
+
+            const table = document.createElement('table');
+            const header = document.createElement('tr');
+            ['Місце','Ім’я','Бали','Час (сек)'].forEach(txt=>{
+                const th=document.createElement('th'); th.innerText=txt; th.style.border="1px solid #333"; th.style.padding="5px"; header.appendChild(th);
+            });
+            table.appendChild(header);
+
+            groupResults.forEach((r,i)=>{
+                const tr = document.createElement('tr');
+                [i+1, r.name, r.score, r.time].forEach(val=>{
+                    const td = document.createElement('td'); td.innerText=val; td.style.border="1px solid #333"; td.style.padding="5px"; tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+            div.appendChild(table);
+        });
+
+    } catch(err){
+        console.error(err);
+        alert("Не вдалося завантажити результати!");
+    }
+
+    document.getElementById('adminPanel').classList.remove('hidden');
 }
