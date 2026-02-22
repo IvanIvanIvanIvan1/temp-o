@@ -61,11 +61,30 @@
         <button onclick="hideAdminPanel()">Закрити</button>
     </div>
 
-    <!-- Кнопка для доступу адміну -->
-    <button id="showAdminBtn" onclick="showAdminPanel()" style="position: fixed; top: 10px; right: 10px;">Адмін</button>
-
+    <button id="showAdminBtn" onclick="showAdminPanel()" class="admin-btn">Адмін</button>
 </main>
 
-<script src="app.js"></script>
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBNbtGJHU2RqrOqaOqy46dDQYCGMXOxGCc",
+    authDomain: "schooltempotrainer.firebaseapp.com",
+    projectId: "schooltempotrainer",
+    storageBucket: "schooltempotrainer.firebasestorage.app",
+    messagingSenderId: "598315404915",
+    appId: "1:598315404915:web:26f94123cd073ffd136406",
+    measurementId: "G-6V9FP4CV6T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
+<script type="module" src="app.js"></script>
+
 </body>
 </html>
