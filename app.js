@@ -1,3 +1,7 @@
+import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+const db = getFirestore(); // Підключення до Firestore
+
 let tasks = [];
 let currentTaskIndex = 0;
 let score = 0;
@@ -6,7 +10,7 @@ let timerInterval;
 let playerName = "";
 let ageGroup = "";
 const allGroups = ["Ч10","Ч12","Ч14","Ч16","Ч18","Ч-О","Ж10","Ж12","Ж14","Ж16","Ж18","Ж-О"];
-const ADMIN_PASSWORD = "Результати"; // постав свій пароль
+const ADMIN_PASSWORD = "Результати"; // твій пароль
 
 // -------------------- Завантаження завдань --------------------
 async function loadTasks() {
@@ -22,7 +26,7 @@ async function loadTasks() {
             select.appendChild(option);
         });
     } catch (err) {
-        console.error("Помилка завантаження тренувань: " + err);
+        console.error("Помилка завантаження тренувань:", err);
         alert("Не вдалося завантажити тренування!");
     }
 }
@@ -31,10 +35,10 @@ loadTasks();
 // -------------------- Початок тренування --------------------
 function startTraining() {
     playerName = document.getElementById('playerName').value.trim();
-    if(playerName === "") { alert("Введіть своє ім'я!"); return; }
+    if (!playerName) { alert("Введіть ім'я!"); return; }
 
     ageGroup = document.getElementById('ageGroupSelect').value;
-    if(ageGroup === "") { alert("Оберіть вікову групу!"); return; }
+    if (!ageGroup) { alert("Оберіть вікову групу!"); return; }
 
     score = 0; time = 0; currentTaskIndex = 0;
 
@@ -53,6 +57,7 @@ function showTask(trainingIndex) {
         endTraining();
         return;
     }
+
     const task = tasks[trainingIndex].stations[currentTaskIndex];
     document.getElementById('questionTitle').innerText = `Станція ${currentTaskIndex+1}`;
     document.getElementById('questionImage').src = task.image;
@@ -61,22 +66,23 @@ function showTask(trainingIndex) {
     buttonsDiv.innerHTML = '';
 
     const allLabels = ['A','B','C','D','E','F','Z'];
-    allLabels.forEach(label=>{
+    allLabels.forEach(label => {
         const btn = document.createElement('button');
         btn.innerText = label;
 
         const option = task.options.find(o => o.label === label);
-        btn.onclick = ()=>{
-            if(option && !option.correct) time += 30; // штраф за неправильну
+        btn.onclick = () => {
+            if(option && !option.correct) time += 30; // штраф
             checkAnswer(option ? option.correct : false, trainingIndex);
         };
+
         buttonsDiv.appendChild(btn);
     });
 }
 
 // -------------------- Перевірка відповіді --------------------
 function checkAnswer(isCorrect, trainingIndex) {
-    if(isCorrect) score += 10;
+    if (isCorrect) score += 10;
     currentTaskIndex++;
     showTask(trainingIndex);
 }
@@ -87,70 +93,79 @@ async function endTraining() {
     document.getElementById('game').classList.add('hidden');
 
     try {
-        // Зберігаємо результат у Firebase
-        await db.collection('results').add({
+        await addDoc(collection(db, "results"), {
             name: playerName,
             group: ageGroup,
             score: score,
             time: time,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestamp: serverTimestamp()
         });
-    } catch(err){
+    } catch (err) {
         console.error("Помилка запису у Firebase:", err);
         alert("Не вдалося зберегти результат!");
     }
 
-    // Показ привітання
-    document.getElementById('congratsMessage').innerText =
-        `Вітаємо, ${playerName}! Ви завершили тренування.`;
+    document.getElementById('congratsMessage').innerText = `Вітаємо, ${playerName}! Ви завершили тренування.`;
     document.getElementById('congrats').classList.remove('hidden');
 }
 
 // -------------------- Закрити привітання --------------------
-function closeCongrats(){
+function closeCongrats() {
     document.getElementById('congrats').classList.add('hidden');
     document.getElementById('menu').classList.remove('hidden');
 }
 
-// -------------------- Адмінка --------------------
+// -------------------- Адмін-панель --------------------
 async function showAdminPanel() {
     const password = prompt("Пароль:");
-    if(password !== ADMIN_PASSWORD){ alert("Неправильний пароль!"); return; }
+    if(password !== ADMIN_PASSWORD) { alert("Неправильний пароль!"); return; }
 
     const div = document.getElementById('recordsList');
     div.innerHTML = '';
 
     try {
-        const snapshot = await db.collection('results').get();
-        const allResults = snapshot.docs.map(doc=>doc.data());
+        const snapshot = await getDocs(collection(db, "results"));
+        const allResults = snapshot.docs.map(doc => doc.data());
 
-        allGroups.forEach(group=>{
-            const groupResults = allResults.filter(r=>r.group===group)
-                                           .sort((a,b)=>a.time-b.time);
+        allGroups.forEach(group => {
+            const groupResults = allResults.filter(r => r.group === group)
+                                           .sort((a,b) => a.time - b.time);
 
             const h3 = document.createElement('h3');
             h3.innerText = group;
             div.appendChild(h3);
 
-            if(groupResults.length===0){
-                div.appendChild(document.createElement('p')).innerText = "Ще немає результатів";
+            if(groupResults.length === 0){
+                const p = document.createElement('p');
+                p.innerText = "Ще немає результатів";
+                div.appendChild(p);
                 return;
             }
 
             const table = document.createElement('table');
+            table.style.borderCollapse = "collapse";
             const header = document.createElement('tr');
             ['Місце','Ім’я','Бали','Час (сек)'].forEach(txt=>{
-                const th=document.createElement('th'); th.innerText=txt; th.style.border="1px solid #333"; th.style.padding="5px"; header.appendChild(th);
+                const th = document.createElement('th');
+                th.innerText = txt;
+                th.style.border = "1px solid #333";
+                th.style.padding = "5px";
+                header.appendChild(th);
             });
             table.appendChild(header);
 
             groupResults.forEach((r,i)=>{
-                const tr=document.createElement('tr');
+                const tr = document.createElement('tr');
                 [i+1, r.name, r.score, r.time].forEach(val=>{
-                    const td=document.createElement('td'); td.innerText=val; td.style.border="1px solid #333"; td.style.padding="5px"; tr.appendChild(td);
+                    const td = document.createElement('td');
+                    td.innerText = val;
+                    td.style.border = "1px solid #333";
+                    td.style.padding = "5px";
+                    tr.appendChild(td);
                 });
                 table.appendChild(tr);
             });
+
             div.appendChild(table);
         });
 
