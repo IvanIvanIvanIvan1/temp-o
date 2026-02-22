@@ -2,8 +2,14 @@
   {
     "name": "Тренування 1",
     "stations": [
-      { "image": "images/2.1.jpg", "options": [{"label": "A","correct":true}] },
-      { "image": "images/2.2.jpg", "options": [{"label": "B","correct":true}] }
+      {"image":"images/2.1.jpg","options":[{"label":"A","correct":true}]},
+      {"image":"images/2.2.jpg","options":[{"label":"B","correct":true}]}
+    ]
+  },
+  {
+    "name": "Тренування 2",
+    "stations": [
+      {"image":"images/2.3.jpg","options":[{"label":"C","correct":true}]}
     ]
   }
 ]
