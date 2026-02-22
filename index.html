@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School TempO Trainer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>🎓 School TempO Trainer</h1>
+    <div class="stats">
+        ⏱ Час: <span id="timer">0</span> сек | 
+        ⭐ Бали: <span id="score">0</span>
+    </div>
+</header>
+
+<main>
+    <div id="menu" class="card">
+        <h2>Оберіть тренування</h2>
+        <select id="trainingSelect"></select>
+        <button onclick="startTraining()">Почати</button>
+    </div>
+
+    <div id="game" class="card hidden">
+        <h2 id="questionTitle"></h2>
+        <img id="questionImage" src="" alt="Завдання" class="question-image">
+        <div id="answerButtons" class="answer-buttons"></div>
+    </div>
+
+    <div id="result" class="card hidden">
+        <h2>Результат</h2>
+        <p id="finalScore"></p>
+        <button onclick="restart()">Заново</button>
+    </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
