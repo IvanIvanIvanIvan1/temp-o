@@ -20,9 +20,27 @@
 <div id="menu" class="card">
     <h2>Оберіть тренування</h2>
     <input type="text" id="playerName" placeholder="Введіть ваше ім'я">
+
+    <select id="ageGroupSelect">
+        <option value="" disabled selected>Оберіть вікову групу</option>
+        <option value="Ч10">Ч10</option>
+        <option value="Ч12">Ч12</option>
+        <option value="Ч14">Ч14</option>
+        <option value="Ч16">Ч16</option>
+        <option value="Ч18">Ч18</option>
+        <option value="Ч-О">Ч-О</option>
+        <option value="Ж10">Ж10</option>
+        <option value="Ж12">Ж12</option>
+        <option value="Ж14">Ж14</option>
+        <option value="Ж16">Ж16</option>
+        <option value="Ж18">Ж18</option>
+        <option value="Ж-О">Ж-О</option>
+    </select>
+
     <select id="trainingSelect">
         <option value="" disabled selected>Оберіть тренування</option>
     </select>
+
     <button onclick="startTraining()">Почати</button>
 </div>
 
