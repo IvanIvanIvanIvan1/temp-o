@@ -11,5 +11,14 @@
         "options": [{"label": "A", "correct": true}]
       }
     ]
+  },
+  {
+    "name": "Тренування 2",
+    "stations": [
+      {
+        "image": "images/3.1.jpg",
+        "options": [{"label": "C", "correct": true}]
+      }
+    ]
   }
 ]
