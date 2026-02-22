@@ -169,3 +169,11 @@ function hideAdminPanel(){
 }
 
 export { startTraining, showAdminPanel };
+// Прив'язуємо до window для onclick у HTML
+window.startTraining = startTraining;
+window.showAdminPanel = showAdminPanel;
+window.hideAdminPanel = hideAdminPanel;
+window.closeCongrats = closeCongrats;
+<button onclick="startTraining()">Почати</button>
+<button id="showAdminBtn" onclick="showAdminPanel()">Адмін</button>
+<button onclick="closeCongrats()">Продовжити</button>
