@@ -5,19 +5,14 @@
       {
         "image": "images/2.1.jpg",
         "options": [
-          {"label": "A", "correct": false},
           {"label": "B", "correct": true},
-          {"label": "C", "correct": false},
-          {"label": "D", "correct": false}
+
         ]
       },
       {
         "image": "images/2.2.jpg",
         "options": [
           {"label": "A", "correct": true},
-          {"label": "B", "correct": false},
-          {"label": "C", "correct": false},
-          {"label": "D", "correct": false}
         ]
       }
     ]
