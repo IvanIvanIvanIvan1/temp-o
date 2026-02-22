@@ -1,0 +1,25 @@
+[
+  {
+    "name": "Тренування 1",
+    "stations": [
+      {
+        "image": "https://i.ibb.co/7t6Z5N7/sample1.jpg",
+        "options": [
+          {"label": "A", "correct": false},
+          {"label": "B", "correct": true},
+          {"label": "C", "correct": false},
+          {"label": "D", "correct": false}
+        ]
+      },
+      {
+        "image": "https://i.ibb.co/2k2dD7V/sample2.jpg",
+        "options": [
+          {"label": "A", "correct": true},
+          {"label": "B", "correct": false},
+          {"label": "C", "correct": false},
+          {"label": "D", "correct": false}
+        ]
+      }
+    ]
+  }
+]
