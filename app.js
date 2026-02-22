@@ -143,3 +143,34 @@ function showAdminPanel() {
 function hideAdminPanel() {
     document.getElementById('adminPanel').classList.add('hidden');
 }
+const ADMIN_PASSWORD = "Результати"; // постав свій пароль
+
+function showAdminPanel() {
+    const password = prompt("Введіть пароль для доступу до адмін-панелі:");
+    if(password !== ADMIN_PASSWORD) {
+        alert("Неправильний пароль!");
+        return;
+    }
+
+    const recordsDiv = document.getElementById('recordsList');
+    recordsDiv.innerHTML = ""; // очистка перед показом
+
+    const allGroups = ["Ч10","Ч12","Ч14","Ч16","Ч18","Ч-О","Ж10","Ж12","Ж14","Ж16","Ж18","Ж-О"];
+
+    allGroups.forEach(group => {
+        const record = JSON.parse(localStorage.getItem(`record_${group}`));
+        const p = document.createElement('p');
+        if(record) {
+            p.innerText = `${group}: ${record.name} — ${record.score} балів за ${record.time} сек`;
+        } else {
+            p.innerText = `${group}: ще немає рекорду`;
+        }
+        recordsDiv.appendChild(p);
+    });
+
+    document.getElementById('adminPanel').classList.remove('hidden');
+}
+
+function hideAdminPanel() {
+    document.getElementById('adminPanel').classList.add('hidden');
+}
