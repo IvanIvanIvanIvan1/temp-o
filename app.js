@@ -4,6 +4,7 @@ let score = 0;
 let time = 0;
 let timerInterval;
 let playerName = ""; // додано для імені учня
+let ageGroup = ""; // для вибору вікової групи
 
 async function loadTasks() {
     try {
@@ -35,7 +36,11 @@ function startTraining() {
         alert("Будь ласка, введіть своє ім'я!");
         return;
     }
-
+ageGroup = document.getElementById('ageGroupSelect').value;
+if(ageGroup === "") {
+    alert("Будь ласка, оберіть вікову групу!");
+    return;
+}
     score = 0;
     time = 0;
     currentTaskIndex = 0;
