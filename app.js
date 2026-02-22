@@ -169,3 +169,8 @@ function hideAdminPanel(){
 }
 
 export { startTraining, showAdminPanel };
+// робимо функції доступними з HTML
+window.startTraining = startTraining;
+window.showAdminPanel = showAdminPanel;
+window.hideAdminPanel = hideAdminPanel;
+window.closeCongrats = closeCongrats;
