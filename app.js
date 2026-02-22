@@ -97,7 +97,6 @@ function checkAnswer(isCorrect, trainingIndex) {
 function endTraining() {
     clearInterval(timerInterval);
     document.getElementById('game').classList.add('hidden');
-    document.getElementById('menu').classList.remove('hidden'); // повертаємо меню
 
     // Зберігаємо рекорд для вікової групи
     const key = `record_${ageGroup}`;
@@ -108,11 +107,16 @@ function endTraining() {
         localStorage.setItem(key, JSON.stringify(newRecord));
     } else {
         const prev = JSON.parse(prevRecord);
-        // Можна зберігати рекорд за найвищим score, або швидший час при однаковому score
         if (score > prev.score || (score === prev.score && time < prev.time)) {
             localStorage.setItem(key, JSON.stringify(newRecord));
         }
     }
+
+    // Показуємо коротке привітання учню
+    alert(`Вітаємо, ${playerName}! Ви завершили тренування.`);
+
+    // Повертаємося до меню
+    document.getElementById('menu').classList.remove('hidden');
 }
 
 // Перезапуск тренування
