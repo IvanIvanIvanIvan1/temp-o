@@ -43,7 +43,14 @@
 
     <button onclick="startTraining()">Почати</button>
 </div>
+<div id="adminPanel" class="card hidden">
+    <h2>Адмінська панель — рекорди</h2>
+    <div id="recordsList"></div>
+    <button onclick="hideAdminPanel()">Закрити</button>
+</div>
 
+<!-- Кнопка для доступу адміну -->
+<button id="showAdminBtn" onclick="showAdminPanel()" style="position: fixed; top: 10px; right: 10px;">Адмін</button>
 <div id="game" class="card hidden">
     <h2 id="questionTitle"></h2>
     <img id="questionImage" src="" alt="Завдання" class="question-image">
