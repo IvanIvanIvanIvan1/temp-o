@@ -5,14 +5,13 @@
       {
         "image": "images/2.1.jpg",
         "options": [
-          {"label": "B", "correct": true},
-
+          {"label": "B", "correct": true}
         ]
       },
       {
         "image": "images/2.2.jpg",
         "options": [
-          {"label": "A", "correct": true},
+          {"label": "A", "correct": true}
         ]
       }
     ]
