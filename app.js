@@ -98,7 +98,7 @@ function endTraining() {
     clearInterval(timerInterval);
     document.getElementById('game').classList.add('hidden');
 
-    // Зберігаємо рекорд для вікової групи
+    // Зберігаємо рекорд
     const key = `record_${ageGroup}`;
     const prevRecord = localStorage.getItem(key);
     const newRecord = { score: score, time: time, name: playerName };
@@ -112,8 +112,10 @@ function endTraining() {
         }
     }
 
-    // Показуємо коротке привітання учню
-    alert(`Вітаємо, ${playerName}! Ви завершили тренування.`);
+    // Показуємо HTML-привітання
+    document.getElementById('congratsMessage').innerText = `Вітаємо, ${playerName}! Ви завершили тренування.`;
+    document.getElementById('congrats').classList.remove('hidden');
+}
 
     // Повертаємося до меню
     document.getElementById('menu').classList.remove('hidden');
