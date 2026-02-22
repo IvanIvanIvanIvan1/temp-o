@@ -14,7 +14,7 @@ header {
 
 .card {
     background: white;
-    max-width: 400px;
+    max-width: 800px; 
     margin: 30px auto;
     padding: 20px;
     border-radius: 12px;
@@ -39,12 +39,12 @@ button:hover {
 .hidden { display: none; }
 
 .question-image {
-    width: 100%;       /* картинка займає всю ширину батьківського контейнера */
-    max-width: 600px;  /* максимальна ширина картинки */
-    height: auto;      /* пропорції зберігаються */
+    width: 100%;      
+    max-width: 600px;  
+    height: auto;     
     margin: 15px 0;
-    border-radius: 8px; /* опціонально, для гарного вигляду */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* трохи тіні */
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
 }
 
 .answer-buttons {
