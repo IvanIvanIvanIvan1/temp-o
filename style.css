@@ -39,8 +39,12 @@ button:hover {
 .hidden { display: none; }
 
 .question-image {
-    max-width: 100%;
+    width: 100%;       /* картинка займає всю ширину батьківського контейнера */
+    max-width: 600px;  /* максимальна ширина картинки */
+    height: auto;      /* пропорції зберігаються */
     margin: 15px 0;
+    border-radius: 8px; /* опціонально, для гарного вигляду */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* трохи тіні */
 }
 
 .answer-buttons {
