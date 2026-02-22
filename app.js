@@ -84,28 +84,22 @@ function checkAnswer(isCorrect, trainingIndex){
 }
 
 // -------------------- Завершення --------------------
-async function endTraining(){
+function endTraining() {
     clearInterval(timerInterval);
+
+    // ховаємо тренування
     document.getElementById('game').classList.add('hidden');
 
-    try{
-        await addDoc(collection(db,"results"),{
-            name: playerName,
-            group: ageGroup,
-            score: score,
-            time: time,
-            timestamp: serverTimestamp()
-        });
-    } catch(err){
-        console.error(err);
-        alert("Не вдалося зберегти результат!");
-    }
+    // зберігаємо рекорд у Firebase або localStorage
+    saveRecord(playerName, ageGroup, score, time);
 
+    // показуємо привітання
+    const congrats = document.getElementById('congrats');
     document.getElementById('congratsMessage').innerText = `Вітаємо, ${playerName}! Ви завершили тренування.`;
-    document.getElementById('congrats').classList.remove('hidden');
+    congrats.classList.remove('hidden');
 }
 
-function closeCongrats(){
+window.closeCongrats = function() {
     document.getElementById('congrats').classList.add('hidden');
     document.getElementById('menu').classList.remove('hidden');
 }
