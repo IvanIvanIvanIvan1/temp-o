@@ -72,3 +72,29 @@ button:hover {
     padding: 12px;
     margin-top: 10px;
 }
+#showAdminBtn {
+    padding: 8px 12px;
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#showAdminBtn:hover {
+    background: #666;
+}
+
+#adminPanel {
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #0003;
+}
