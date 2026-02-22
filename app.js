@@ -9,7 +9,7 @@ let ageGroup = "";
 const allGroups = ["Ч10","Ч12","Ч14","Ч16","Ч18","Ч-О","Ж10","Ж12","Ж14","Ж16","Ж18","Ж-О"];
 const ADMIN_PASSWORD = "Результати";
 
-// --- Завантаження завдань ---
+// Завантаження завдань
 async function loadTasks() {
     try {
         const res = await fetch('data/tasks.json');
@@ -28,14 +28,12 @@ async function loadTasks() {
     }
 }
 
-loadTasks();
-
-// --- Початок тренування ---
+// Початок тренування
 function startTraining() {
     playerName = document.getElementById('playerName').value.trim();
-    if(!playerName) { alert("Будь ласка, введіть своє ім'я!"); return; }
+    if(!playerName) { alert("Введіть ім'я!"); return; }
     ageGroup = document.getElementById('ageGroupSelect').value;
-    if(!ageGroup) { alert("Будь ласка, оберіть вікову групу!"); return; }
+    if(!ageGroup) { alert("Оберіть групу!"); return; }
 
     score = 0; time = 0; currentTaskIndex = 0;
     document.getElementById('menu').classList.add('hidden');
@@ -47,7 +45,7 @@ function startTraining() {
     showTask(trainingIndex);
 }
 
-// --- Показати завдання ---
+// Показати завдання
 function showTask(trainingIndex) {
     if(currentTaskIndex >= tasks[trainingIndex].stations.length) {
         endTraining();
@@ -68,49 +66,62 @@ function showTask(trainingIndex) {
     });
 }
 
-// --- Перевірка відповіді ---
+// Перевірка відповіді
 function checkAnswer(isCorrect, trainingIndex) {
     if(isCorrect) score += 10;
+    else time += 30; // штраф за неправильну відповідь
     currentTaskIndex++;
     showTask(trainingIndex);
 }
 
-// --- Завершення тренування ---
+// Завершення тренування
 function endTraining() {
     clearInterval(timerInterval);
     document.getElementById('game').classList.add('hidden');
 
-    // Зберігаємо рекорд
-    const key = `record_${ageGroup}`;
-    const prevRecord = localStorage.getItem(key);
-    const newRecord = { score, time, name: playerName };
-    if(!prevRecord || score > JSON.parse(prevRecord).score || (score === JSON.parse(prevRecord).score && time < JSON.parse(prevRecord).time)) {
-        localStorage.setItem(key, JSON.stringify(newRecord));
-    }
+    // Зберігаємо результат
+    const key = `records_${ageGroup}`;
+    const records = JSON.parse(localStorage.getItem(key)) || [];
+    records.push({ name: playerName, score, time });
+    // Сортуємо спочатку по часу, потім по балам (якщо хочеш)
+    records.sort((a,b) => a.time - b.time);
+    localStorage.setItem(key, JSON.stringify(records));
 
-    // Показати HTML-привітання
+    // Показуємо привітання
     document.getElementById('congratsMessage').innerText = `Вітаємо, ${playerName}! Ви завершили тренування.`;
     document.getElementById('congrats').classList.remove('hidden');
 }
 
-// --- Закрити привітання ---
 function closeCongrats() {
     document.getElementById('congrats').classList.add('hidden');
     document.getElementById('menu').classList.remove('hidden');
 }
 
-// --- Адмін-панель ---
+// Адмін-панель
 function showAdminPanel() {
-    const password = prompt("Введіть пароль для доступу до адмін-панелі:");
+    const password = prompt("Пароль для доступу до адмін-панелі:");
     if(password !== ADMIN_PASSWORD) { alert("Неправильний пароль!"); return; }
 
     const recordsDiv = document.getElementById('recordsList');
     recordsDiv.innerHTML = "";
+
     allGroups.forEach(group => {
-        const record = JSON.parse(localStorage.getItem(`record_${group}`));
-        const p = document.createElement('p');
-        p.innerText = record ? `${group}: ${record.name} — ${record.score} балів за ${record.time} сек` : `${group}: ще немає рекорду`;
-        recordsDiv.appendChild(p);
+        const recs = JSON.parse(localStorage.getItem(`records_${group}`)) || [];
+        const title = document.createElement('h3');
+        title.innerText = group;
+        recordsDiv.appendChild(title);
+
+        if(recs.length === 0) {
+            const p = document.createElement('p');
+            p.innerText = "Ще немає результатів";
+            recordsDiv.appendChild(p);
+        } else {
+            recs.forEach(r => {
+                const p = document.createElement('p');
+                p.innerText = `${r.name} — ${r.score} балів за ${r.time} сек`;
+                recordsDiv.appendChild(p);
+            });
+        }
     });
 
     document.getElementById('adminPanel').classList.remove('hidden');
