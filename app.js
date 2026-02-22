@@ -174,6 +174,4 @@ window.startTraining = startTraining;
 window.showAdminPanel = showAdminPanel;
 window.hideAdminPanel = hideAdminPanel;
 window.closeCongrats = closeCongrats;
-<button onclick="startTraining()">Почати</button>
-<button id="showAdminBtn" onclick="showAdminPanel()">Адмін</button>
-<button onclick="closeCongrats()">Продовжити</button>
+
