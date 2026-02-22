@@ -13,10 +13,11 @@
 </header>
 
 <main>
-    <!-- Меню -->
+    <!-- Меню вибору -->
     <div id="menu" class="card">
         <h2>Оберіть тренування</h2>
         <input type="text" id="playerName" placeholder="Введіть ваше ім'я">
+
         <select id="ageGroupSelect">
             <option value="" disabled selected>Оберіть вікову групу</option>
             <option value="Ч10">Ч10</option>
@@ -32,17 +33,19 @@
             <option value="Ж18">Ж18</option>
             <option value="Ж-О">Ж-О</option>
         </select>
+
         <select id="trainingSelect">
             <option value="" disabled selected>Оберіть тренування</option>
         </select>
+
         <button onclick="startTraining()">Почати</button>
     </div>
 
     <!-- Тренування -->
     <div id="game" class="card hidden">
         <h2 id="questionTitle"></h2>
-        <img id="questionImage" src="" class="question-image" alt="Завдання">
-        <div id="answerButtons"></div>
+        <img id="questionImage" src="" alt="Завдання" class="question-image">
+        <div id="answerButtons" class="answer-buttons"></div>
     </div>
 
     <!-- Привітання -->
@@ -58,27 +61,30 @@
         <button onclick="hideAdminPanel()">Закрити</button>
     </div>
 
-    <!-- Кнопка доступу адміну -->
-    <button id="showAdminBtn" onclick="showAdminPanel()" style="position: fixed; top:10px; right:10px;">Адмін</button>
+    <button id="showAdminBtn" onclick="showAdminPanel()" class="admin-btn">Адмін</button>
 </main>
 
-<script src="app.js"></script>
-</body>
-</html>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-<script>
   const firebaseConfig = {
     apiKey: "AIzaSyBNbtGJHU2RqrOqaOqy46dDQYCGMXOxGCc",
     authDomain: "schooltempotrainer.firebaseapp.com",
     projectId: "schooltempotrainer",
     storageBucket: "schooltempotrainer.firebasestorage.app",
     messagingSenderId: "598315404915",
-    appId: "1:598315404915:web:26f94123cd073ffd136406"
+    appId: "1:598315404915:web:26f94123cd073ffd136406",
+    measurementId: "G-6V9FP4CV6T"
   };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
 </script>
-<script src="app.js"></script>
+
+<script type="module" src="app.js"></script>
+
+</body>
+</html>
