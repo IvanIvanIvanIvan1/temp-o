@@ -117,13 +117,8 @@ function endTraining() {
     document.getElementById('congrats').classList.remove('hidden');
 }
 
-    // Повертаємося до меню
-    document.getElementById('menu').classList.remove('hidden');
-}
-
-// Перезапуск тренування
-function restart() {
-    document.getElementById('game').classList.add('hidden');
+function closeCongrats() {
+    document.getElementById('congrats').classList.add('hidden');
     document.getElementById('menu').classList.remove('hidden');
 }
 const allGroups = ["Ч10","Ч12","Ч14","Ч16","Ч18","Ч-О","Ж10","Ж12","Ж14","Ж16","Ж18","Ж-О"];
