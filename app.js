@@ -6,15 +6,24 @@ let timerInterval;
 let playerName = ""; // додано для імені учня
 
 async function loadTasks() {
-    const res = await fetch('data/tasks.json');
-    tasks = await res.json();
-    const select = document.getElementById('trainingSelect');
-    tasks.forEach((t, i) => {
-        const option = document.createElement('option');
-        option.value = i;
-        option.text = t.name;
-        select.appendChild(option);
-    });
+    try {
+        const res = await fetch('data/tasks.json');
+        tasks = await res.json();
+        const select = document.getElementById('trainingSelect');
+
+        // спочатку додамо плейсхолдер
+        select.innerHTML = '<option value="" disabled selected>Оберіть тренування</option>';
+
+        tasks.forEach((t, i) => {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = t.name;
+            select.appendChild(option);
+        });
+    } catch (err) {
+        alert("Помилка завантаження тренувань: " + err);
+        console.error(err);
+    }
 }
 
 loadTasks();
