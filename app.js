@@ -84,22 +84,28 @@ function checkAnswer(isCorrect, trainingIndex){
 }
 
 // -------------------- Завершення --------------------
-function endTraining() {
+async function endTraining(){
     clearInterval(timerInterval);
-
-    // ховаємо тренування
     document.getElementById('game').classList.add('hidden');
 
-    // зберігаємо рекорд у Firebase або localStorage
-    saveRecord(playerName, ageGroup, score, time);
+    try{
+        await addDoc(collection(db,"results"),{
+            name: playerName,
+            group: ageGroup,
+            score: score,
+            time: time,
+            timestamp: serverTimestamp()
+        });
+    } catch(err){
+        console.error(err);
+        alert("Не вдалося зберегти результат!");
+    }
 
-    // показуємо привітання
-    const congrats = document.getElementById('congrats');
     document.getElementById('congratsMessage').innerText = `Вітаємо, ${playerName}! Ви завершили тренування.`;
-    congrats.classList.remove('hidden');
+    document.getElementById('congrats').classList.remove('hidden');
 }
 
-window.closeCongrats = function() {
+function closeCongrats(){
     document.getElementById('congrats').classList.add('hidden');
     document.getElementById('menu').classList.remove('hidden');
 }
@@ -163,8 +169,3 @@ function hideAdminPanel(){
 }
 
 export { startTraining, showAdminPanel };
-// робимо функції доступними з HTML
-window.startTraining = startTraining;
-window.showAdminPanel = showAdminPanel;
-window.hideAdminPanel = hideAdminPanel;
-window.closeCongrats = closeCongrats;
