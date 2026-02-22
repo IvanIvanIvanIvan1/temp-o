@@ -47,12 +47,18 @@ function showTask(trainingIndex) {
 
     const buttonsDiv = document.getElementById('answerButtons');
     buttonsDiv.innerHTML = '';
-    task.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.innerText = opt.label;
-        btn.onclick = () => checkAnswer(opt.correct, trainingIndex);
-        buttonsDiv.appendChild(btn);
-    });
+const allLabels = ['A','B','C','D','E','F','Z'];
+
+allLabels.forEach(label => {
+    const btn = document.createElement('button');
+    btn.innerText = label;
+
+    // шукаємо у task.options, чи ця кнопка правильна
+    const option = task.options.find(o => o.label === label);
+    btn.onclick = () => checkAnswer(option ? option.correct : false, trainingIndex);
+
+    buttonsDiv.appendChild(btn);
+});
 }
 
 function checkAnswer(isCorrect, trainingIndex) {
