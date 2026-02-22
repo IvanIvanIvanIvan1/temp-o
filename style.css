@@ -1,100 +1,82 @@
 body {
     font-family: Arial, sans-serif;
+    background: #f5f5f5;
     margin: 0;
-    text-align: center;
-    background: linear-gradient(135deg,#2b7cff,#6dd5ed);
-    color: #333;
+    padding: 0;
 }
 
 header {
-    background: #1747c8;
-    color: white;
-    padding: 15px;
+    background: #4a90e2;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
 }
 
 .card {
-    background: white;
-    max-width: 1600px; 
-    margin: 30px auto;
+    background: #fff;
+    max-width: 600px;
+    margin: 20px auto;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+.hidden { display: none; }
+
 button {
-    padding: 10px 20px;
-    margin: 5px;
+    background: #4a90e2;
+    color: #fff;
     border: none;
+    padding: 10px 15px;
+    margin: 5px;
     border-radius: 6px;
-    background: #2b7cff;
-    color: white;
     cursor: pointer;
     font-size: 16px;
 }
 
 button:hover {
-    background: #1747c8;
+    background: #357ABD;
 }
 
-.hidden { display: none; }
+select, input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
 
 .question-image {
-    width: 100%;      
-    max-width: 1600px;  
-    height: auto;     
-    margin: 15px 0;
-    border-radius: 8px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
-}
-
-.answer-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-#menu input,
-#menu select {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0; /* відстань між полями */
-    font-size: 16px;
-    box-sizing: border-box;
+    max-height: 300px;
+    object-fit: contain;
+    margin-bottom: 10px;
 }
 
-#menu button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-}
-
-#menu button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-}
-#showAdminBtn {
-    padding: 8px 12px;
-    background: #444;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-#showAdminBtn:hover {
-    background: #666;
-}
-
-#adminPanel {
+.admin-btn {
     position: fixed;
-    top: 50px;
-    right: 50px;
-    width: 300px;
-    max-height: 80vh;
-    overflow-y: auto;
-    background: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px #0003;
+    top: 10px;
+    right: 10px;
+    background: #e27a4a;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 5px;
+    text-align: center;
+}
+
+th {
+    background: #4a90e2;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
 }
