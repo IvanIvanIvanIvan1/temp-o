@@ -120,3 +120,26 @@ function restart() {
     document.getElementById('game').classList.add('hidden');
     document.getElementById('menu').classList.remove('hidden');
 }
+const allGroups = ["Ч10","Ч12","Ч14","Ч16","Ч18","Ч-О","Ж10","Ж12","Ж14","Ж16","Ж18","Ж-О"];
+
+function showAdminPanel() {
+    const recordsDiv = document.getElementById('recordsList');
+    recordsDiv.innerHTML = ""; // очистка перед показом
+
+    allGroups.forEach(group => {
+        const record = JSON.parse(localStorage.getItem(`record_${group}`));
+        const p = document.createElement('p');
+        if(record) {
+            p.innerText = `${group}: ${record.name} — ${record.score} балів за ${record.time} сек`;
+        } else {
+            p.innerText = `${group}: ще немає рекорду`;
+        }
+        recordsDiv.appendChild(p);
+    });
+
+    document.getElementById('adminPanel').classList.remove('hidden');
+}
+
+function hideAdminPanel() {
+    document.getElementById('adminPanel').classList.add('hidden');
+}
