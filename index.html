@@ -17,57 +17,59 @@
 </header>
 
 <main>
-<div id="menu" class="card">
-    <h2>Оберіть тренування</h2>
-    <input type="text" id="playerName" placeholder="Введіть ваше ім'я">
+    <!-- Меню вибору тренування -->
+    <div id="menu" class="card">
+        <h2>Оберіть тренування</h2>
+        <input type="text" id="playerName" placeholder="Введіть ваше ім'я">
 
-    <select id="ageGroupSelect">
-        <option value="" disabled selected>Оберіть вікову групу</option>
-        <option value="Ч10">Ч10</option>
-        <option value="Ч12">Ч12</option>
-        <option value="Ч14">Ч14</option>
-        <option value="Ч16">Ч16</option>
-        <option value="Ч18">Ч18</option>
-        <option value="Ч-О">Ч-О</option>
-        <option value="Ж10">Ж10</option>
-        <option value="Ж12">Ж12</option>
-        <option value="Ж14">Ж14</option>
-        <option value="Ж16">Ж16</option>
-        <option value="Ж18">Ж18</option>
-        <option value="Ж-О">Ж-О</option>
-    </select>
+        <select id="ageGroupSelect">
+            <option value="" disabled selected>Оберіть вікову групу</option>
+            <option value="Ч10">Ч10</option>
+            <option value="Ч12">Ч12</option>
+            <option value="Ч14">Ч14</option>
+            <option value="Ч16">Ч16</option>
+            <option value="Ч18">Ч18</option>
+            <option value="Ч-О">Ч-О</option>
+            <option value="Ж10">Ж10</option>
+            <option value="Ж12">Ж12</option>
+            <option value="Ж14">Ж14</option>
+            <option value="Ж16">Ж16</option>
+            <option value="Ж18">Ж18</option>
+            <option value="Ж-О">Ж-О</option>
+        </select>
 
-    <select id="trainingSelect">
-        <option value="" disabled selected>Оберіть тренування</option>
-    </select>
+        <select id="trainingSelect">
+            <option value="" disabled selected>Оберіть тренування</option>
+        </select>
 
-    <button onclick="startTraining()">Почати</button>
-</div>
-<div id="adminPanel" class="card hidden">
-    <h2>Адмінська панель — рекорди</h2>
-    <div id="recordsList"></div>
-    <button onclick="hideAdminPanel()">Закрити</button>
-</div>
+        <button onclick="startTraining()">Почати</button>
+    </div>
 
-<!-- Кнопка для доступу адміну -->
-<button id="showAdminBtn" onclick="showAdminPanel()" style="position: fixed; top: 10px; right: 10px;">Адмін</button>
-<div id="game" class="card hidden">
-    <h2 id="questionTitle"></h2>
-    <img id="questionImage" src="" alt="Завдання" class="question-image">
-    <div id="answerButtons" class="answer-buttons"></div>
-</div>
+    <!-- Тренування -->
+    <div id="game" class="card hidden">
+        <h2 id="questionTitle"></h2>
+        <img id="questionImage" src="" alt="Завдання" class="question-image">
+        <div id="answerButtons" class="answer-buttons"></div>
+    </div>
 
-<div id="result" class="card hidden">
-    <h2>Результат</h2>
-    <p id="finalScore"></p>
-    <button onclick="restart()">Заново</button>
-</div>
+    <!-- Привітання після завершення -->
+    <div id="congrats" class="card hidden">
+        <h2 id="congratsMessage"></h2>
+        <button onclick="closeCongrats()">Продовжити</button>
+    </div>
+
+    <!-- Адмін-панель -->
+    <div id="adminPanel" class="card hidden">
+        <h2>Адмінська панель — рекорди</h2>
+        <div id="recordsList"></div>
+        <button onclick="hideAdminPanel()">Закрити</button>
+    </div>
+
+    <!-- Кнопка для доступу адміну -->
+    <button id="showAdminBtn" onclick="showAdminPanel()" style="position: fixed; top: 10px; right: 10px;">Адмін</button>
+
 </main>
 
 <script src="app.js"></script>
 </body>
 </html>
-<div id="congrats" class="card hidden">
-    <h2 id="congratsMessage"></h2>
-    <button onclick="closeCongrats()">Продовжити</button>
-</div>
